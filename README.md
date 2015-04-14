@@ -8,14 +8,14 @@ At the moment [Appium](http://appium.io/) only supports one session at a time. I
 
 A workaround to this is to start several appium servers on different ports and make your tests refer to these different instances. However, depending on how your testing project is set up, it can be cumbersome to have to configure different endpoints.
 
-Then is when this simple tool might come handy. AppiumProxy is a python script that starts a web server, hooks to appium session creation requests, and delegates the handling of that session to a specific appium server instance. So in you can have a single endpoint in your tests.
+Then is when this simple tool might come handy. AppiumProxy is a python script that starts a web server, hooks to appium session creation requests, and delegates the handling of that session to a specific appium server instance. So you can have a single endpoint configured in your tests.
 
-Keep in mind this is just a proof of concept and might be buggy. At the moment it has worked pretty fine for me.
+Keep in mind this is just a proof of concept and might be buggy. At the moment it has worked pretty well for me.
 
 Dependencies
 ------------
 
-My initial intentin was to write this tool using only the standard lib. However, httplib and urllib2 are SO UGLY that I decided to go with [requests](http://docs.python-requests.org/en/latest/) instead. You can install it by running `pip install requests` or `easy_install requests`.
+My initial intention was to write this tool using only the standard lib. However, httplib and urllib2 are SO UGLY that I decided to go with [requests](http://docs.python-requests.org/en/latest/) instead. You can install it by running `pip install requests` or `easy_install requests`.
 
 Starting the proxy
 ------------------
@@ -26,11 +26,13 @@ To bind the proxy to the default address (localhost:7777) run:
 python appium_proxy.py
 ```
 
-Or specify host/interface and port. E.g.:
+Or specify a host/interface and port. E.g.:
 
 ```
 python appium_proxy.py -H 0.0.0.0 -p 1234
 ```
+
+Then set your test project to connect to http://127.0.0.1:7777/wd/hub
 
 Strategies to dispatch sessions to different Appium Servers
 ----------------------------------------------------------
@@ -68,3 +70,13 @@ $ appium -p 4923 --chromedriver-port 9723
 
 ```
 
+
+Some comments and thoughts
+--------------------------
+
+I've just tried this with Appium servers, however it should potentially work with any kind of selenium server. So you could have a single endpoint configured and forward calls to Selenium Grid or and Appium server depending on the driver's capabilities.
+
+License
+-------
+
+[MIT License](http://opensource.org/licenses/MIT), so you are free do pretty much whatever you want with this.
